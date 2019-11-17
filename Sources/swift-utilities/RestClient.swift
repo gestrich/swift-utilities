@@ -31,12 +31,12 @@ open class RestClient: NSObject {
         self.auth = auth
     }
     
-    func jsonData(relativeURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
+    public func jsonData(relativeURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         let urlString = baseURL.appending(relativeURL)
         jsonData(fullURL:urlString, completionBlock:completionBlock, errorBlock:errorBlock)
     }
     
-    func jsonData(fullURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
+    public func jsonData(fullURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         var headersToSet = ["Content-Type":"application/json", "Accept":"application/json"]
         if let headers = self.headers {
             headersToSet += headers
@@ -46,12 +46,12 @@ open class RestClient: NSObject {
         http.getJSONData(url:url, completionBlock:completionBlock, errorBlock:errorBlock)
     }
 
-    func uploadFile(filePath: String, relativeDestinationPath: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
+    public func uploadFile(filePath: String, relativeDestinationPath: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         let fullDestinationPath = baseURL.appending(relativeDestinationPath)
         uploadFile(filePath: filePath, fullDestinationPath: fullDestinationPath, completionBlock: completionBlock, errorBlock: errorBlock)
     }
     
-    func uploadFile(filePath: String, fullDestinationPath: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
+    public func uploadFile(filePath: String, fullDestinationPath: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         var headersToSet = ["Accept":"application/json", "X-Atlassian-Token":"nocheck"]
         if let headers = self.headers {
             headersToSet += headers
