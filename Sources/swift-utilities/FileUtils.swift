@@ -28,7 +28,7 @@ public func filenamesMatching(pattern: String, directory: String ) -> [String] {
     return toRet
 }
 
-func moveFile(source: String, destination: String) -> Bool{
+public func moveFile(source: String, destination: String) -> Bool{
     guard let _ = try? FileManager.default.moveItem(atPath: source, toPath: destination) else {
         print("Error moving file")
         return false
