@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Dictionary {
+public extension Dictionary {
     
     /// Build string representation of HTTP parameter dictionary of keys and objects
     ///

@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension String {
+public extension String {
 
     func getPartAfter(toSearch: String) -> String {
         
@@ -23,7 +23,7 @@ extension String {
 }
 
 
-extension String {
+public extension String {
     
     /// Percent escapes values to be added to a URL query as specified in RFC 3986
     ///
