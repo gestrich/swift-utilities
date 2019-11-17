@@ -1,6 +1,6 @@
 //
 //  RestClient.swift
-//  FFIOSTools
+//  swift-utilities
 //
 //  Created by Bill Gestrich on 10/29/17.
 //  Copyright © 2017 Bill Gestrich. All rights reserved.
@@ -8,37 +8,58 @@
 
 import Foundation
 
-class RestClient: NSObject {
+public enum RestClientError: Error {
+    case serviceError(Error)
+    case statusCode(Int)
+    case noData
+    case deserialization(Error)
+}
+
+public class RestClient: NSObject {
     
     let baseURL: String
     var headers: [String:String]?
     var auth : BasicAuth?
     
-    init(baseURL: String){
+    public init(baseURL: String){
         self.baseURL = baseURL
         super.init()
     }
     
-    convenience init(baseURL: String, auth: BasicAuth){
+    public convenience init(baseURL: String, auth: BasicAuth){
         self.init(baseURL: baseURL)
         self.auth = auth
     }
     
-    func jsonFor(relativeURL: String) -> NSDictionary {
+    func jsonData(relativeURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         let urlString = baseURL.appending(relativeURL)
-        return jsonFor(fullURL:urlString)
+        jsonData(fullURL:urlString, completionBlock:completionBlock, errorBlock:errorBlock)
     }
     
-    func jsonFor(fullURL: String) -> NSDictionary {
+    func jsonData(fullURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         var headersToSet = ["Content-Type":"application/json", "Accept":"application/json"]
         if let headers = self.headers {
             headersToSet += headers
         }
         let http = SimpleHttp(auth:self.auth, headers:headersToSet);
         let url = URL(string: fullURL)!
-        let json = http.getJSON(url:url)
-        
-        return json        
+        http.getJSONData(url:url, completionBlock:completionBlock, errorBlock:errorBlock)
     }
 
+    func uploadFile(filePath: String, relativeDestinationPath: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
+        let fullDestinationPath = baseURL.appending(relativeDestinationPath)
+        uploadFile(filePath: filePath, fullDestinationPath: fullDestinationPath, completionBlock: completionBlock, errorBlock: errorBlock)
+    }
+    
+    func uploadFile(filePath: String, fullDestinationPath: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
+        var headersToSet = ["Accept":"application/json", "X-Atlassian-Token":"nocheck"]
+        if let headers = self.headers {
+            headersToSet += headers
+        }
+        let http = SimpleHttp(auth:self.auth, headers:headersToSet)
+        let destinationURL = URL(string: fullDestinationPath)!
+        let fileURL = URL(string: filePath)!
+        http.uploadFile(fileUrl: fileURL, destinationURL: destinationURL, completionBlock: completionBlock, errorBlock: errorBlock)
+    }
+    
 }
