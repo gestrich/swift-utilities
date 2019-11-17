@@ -15,7 +15,7 @@ public enum RestClientError: Error {
     case deserialization(Error)
 }
 
-public class RestClient: NSObject {
+open class RestClient: NSObject {
     
     let baseURL: String
     var headers: [String:String]?
