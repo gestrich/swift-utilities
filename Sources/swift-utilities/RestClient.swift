@@ -31,6 +31,12 @@ open class RestClient: NSObject {
         self.auth = auth
     }
     
+    public convenience init(baseURL: String, auth: BasicAuth?, headers:[String:String]?){
+        self.init(baseURL: baseURL)
+        self.auth = auth
+        self.headers = headers
+    }
+    
     public func jsonData(relativeURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         let urlString = baseURL.appending(relativeURL)
         jsonData(fullURL:urlString, completionBlock:completionBlock, errorBlock:errorBlock)
