@@ -8,7 +8,7 @@
 
 import Foundation
 
-func replaceProcess(program: String, arguments: [String]) {
+public func replaceProcess(program: String, arguments: [String]) {
     
     //Leading aray with "" to hack around issue where
     //first argument seems ignored by execv
@@ -20,7 +20,7 @@ func replaceProcess(program: String, arguments: [String]) {
 }
 
 
-func shell(arguments: [String] = []) -> (stringResult: String? , code:Int32) {
+public func shell(arguments: [String] = []) -> (stringResult: String? , code:Int32) {
     let task = Process()
     task.launchPath = "/usr/bin/env" 
     task.arguments = arguments
@@ -36,7 +36,7 @@ func shell(arguments: [String] = []) -> (stringResult: String? , code:Int32) {
 }
 
 
-func getProgram(commandLineArgs: [String]) -> String {
+public func getProgram(commandLineArgs: [String]) -> String {
     
     var program = ""
     if commandLineArgs.count >= 2 {
@@ -46,11 +46,11 @@ func getProgram(commandLineArgs: [String]) -> String {
     return program
 }
 
-func getProgramArguments(commandLineArgs: [String]) -> [String] {
+public func getProgramArguments(commandLineArgs: [String]) -> [String] {
     return Array(CommandLine.arguments[2..<CommandLine.arguments.count])
 }
 
-func getEnvironmentVariable(key: String) -> String? {
+public func getEnvironmentVariable(key: String) -> String? {
     let keySeparator = "="
     let configurationPath = NSHomeDirectory().appending("/.fftools")
     guard let fileString = try? String(contentsOfFile: configurationPath) else {
@@ -75,7 +75,7 @@ func getEnvironmentVariable(key: String) -> String? {
 
 
 
-func promptForSelection(title: String, options: [String]) -> Int {
+public func promptForSelection(title: String, options: [String]) -> Int {
     print("\n\(title)")
     
     var promptString = ""
@@ -91,7 +91,7 @@ func promptForSelection(title: String, options: [String]) -> Int {
     return Int(response!)!
 }
 
-func promptForText(title: String) -> String {
+public func promptForText(title: String) -> String {
     print(title, separator:" ", terminator:"") 
     let response = readLine()
     return response!
