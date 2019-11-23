@@ -34,7 +34,7 @@ public class SimpleHttp: NSObject {
         self.headers = headers
     }
     
-    func getJSONData(url: URL, completionBlock:(@escaping (Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
+    func getData(url: URL, completionBlock:(@escaping (Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         let request = URLRequest(url: url)
         
         let config = URLSessionConfiguration.default

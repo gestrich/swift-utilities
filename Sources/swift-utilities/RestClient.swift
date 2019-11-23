@@ -37,19 +37,19 @@ open class RestClient: NSObject {
         self.headers = headers
     }
     
-    public func jsonData(relativeURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
+    public func getData(relativeURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         let urlString = baseURL.appending(relativeURL)
-        jsonData(fullURL:urlString, completionBlock:completionBlock, errorBlock:errorBlock)
+        getData(fullURL:urlString, completionBlock:completionBlock, errorBlock:errorBlock)
     }
     
-    public func jsonData(fullURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
+    public func getData(fullURL: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         var headersToSet = ["Content-Type":"application/json", "Accept":"application/json"]
         if let headers = self.headers {
             headersToSet += headers
         }
         let http = SimpleHttp(auth:self.auth, headers:headersToSet);
         let url = URL(string: fullURL)!
-        http.getJSONData(url:url, completionBlock:completionBlock, errorBlock:errorBlock)
+        http.getData(url:url, completionBlock:completionBlock, errorBlock:errorBlock)
     }
 
     public func uploadFile(filePath: String, relativeDestinationPath: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
