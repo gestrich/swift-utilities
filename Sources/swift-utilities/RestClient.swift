@@ -68,4 +68,8 @@ open class RestClient: NSObject {
         http.uploadFile(fileUrl: fileURL, destinationURL: destinationURL, completionBlock: completionBlock, errorBlock: errorBlock)
     }
     
+    public func fullURLWithRelativeURL(relativeURL: String) -> String {
+        return baseURL.appending(relativeURL)
+    }
+    
 }
