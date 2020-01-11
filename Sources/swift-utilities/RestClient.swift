@@ -18,7 +18,7 @@ public enum RestClientError: Error {
 open class RestClient: NSObject {
     
     let baseURL: String
-    var headers: [String:String]?
+    open var headers: [String:String]?
     var auth : BasicAuth?
     
     public init(baseURL: String){
