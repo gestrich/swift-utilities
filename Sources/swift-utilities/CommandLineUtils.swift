@@ -81,7 +81,9 @@ public func promptForSelection(title: String, options: [String]) -> Int {
     var promptString = ""
     var x = 0
     for option in options {
-        promptString = promptString.appendingFormat("\n%u:  %@", x, option)
+        option.withCString { //Using option string for C-String causes errors on Linux 
+            promptString = promptString.appendingFormat("\n%u:  %@", x, $0)    
+        }
         x += 1
     }
     
