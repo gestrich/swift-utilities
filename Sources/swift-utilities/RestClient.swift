@@ -51,6 +51,21 @@ open class RestClient: NSObject {
         let url = URL(string: fullURL)!
         http.getData(url:url, completionBlock:completionBlock, errorBlock:errorBlock)
     }
+    
+    public func peformJSONPost<T>(relativeURL: String, payload: T, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void))  where T : Encodable {
+        let urlString = baseURL.appending(relativeURL)
+        peformJSONPost(fullURL: urlString, payload: payload, completionBlock: completionBlock, errorBlock: errorBlock)
+    }
+    
+    public func peformJSONPost<T>(fullURL: String, payload: T, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void))  where T : Encodable {
+        var headersToSet = ["Content-Type":"application/json", "Accept":"application/json"]
+        if let headers = self.headers {
+            headersToSet += headers
+        }
+        let http = SimpleHttp(auth:self.auth, headers:headersToSet);
+        let url = URL(string: fullURL)!
+        http.peformJSONPost(url: url, payload: payload, completionBlock: completionBlock, errorBlock: errorBlock)
+    }
 
     public func uploadFile(filePath: String, relativeDestinationPath: String, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         let fullDestinationPath = baseURL.appending(relativeDestinationPath)

@@ -73,6 +73,63 @@ public class SimpleHttp: NSObject {
         task.resume()
     }
     
+    func peformJSONPost<T>(url: URL, payload: T, completionBlock:@escaping ((Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void))  where T : Encodable {
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        var authHeaders = [String: String]()
+        if let auth = self.auth {
+            let userPasswordData = "\(auth.username):\(auth.password)".data(using: .utf8)
+            let base64EncodedCredential = userPasswordData!.base64EncodedString(options: Data.Base64EncodingOptions.init(rawValue: 0))
+            let authString = "Basic \(base64EncodedCredential)"
+            authHeaders["authorization"] = authString
+        }
+        authHeaders += self.headers
+        
+        let config = URLSessionConfiguration.default
+        config.httpAdditionalHeaders = authHeaders
+        
+        let data = try! JSONEncoder().encode(payload)
+        request.httpBody = data
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+            
+            if let error = error {
+                errorBlock(.serviceError(error))
+                return
+            }
+            
+            guard let data = data else {
+                errorBlock(.noData)
+                return
+            }
+//
+//            guard let response = response else {
+//                errorBlock(self.genericError(errorInformation: "No response returned"))
+//                return
+//            }
+//
+//            guard let httpResponse = response as? HTTPURLResponse else {
+//                errorBlock(self.genericError(errorInformation: "Could not translate response to HTTPURLResponse: \(response.self)"))
+//                return
+//            }
+//
+//            guard let urlString = String(data: data, encoding: .utf8) else{
+//                errorBlock(self.genericError(errorInformation: "No URL from Data"))
+//                return
+//            }
+//
+//            guard httpResponse.statusCode == 200 else {
+//                errorBlock(self.genericError(errorInformation: "Status code \(httpResponse.statusCode) returned. Data: \(urlString)"))
+//                return
+//            }
+//
+            completionBlock(data)
+        }
+        task.resume()
+    }
+    
     func uploadFile(fileUrl: URL, destinationURL: URL, completionBlock:(@escaping (Data) -> Void), errorBlock:(@escaping (RestClientError) -> Void)){
         
         let fileName = (fileUrl.path as NSString).lastPathComponent
