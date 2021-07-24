@@ -35,3 +35,28 @@ public func moveFile(source: String, destination: String) -> Bool{
     }
     return true
 }
+
+public func replaceLinesAtFilePath(_ filePath: String, containing:String, newString: String) {
+    
+    guard let fileContents = try? String(contentsOfFile: filePath, encoding: .utf8) else{
+        return
+    }
+    
+    let lineSeparator: Character = "\n"
+    
+    let lines = fileContents.split(separator: lineSeparator)
+    var updatedLines = lines.map({String($0)})
+    var index = 0
+    var linesUpdated = false
+    for part in lines {
+        if part.contains(containing){
+            updatedLines.remove(at: index)
+            updatedLines.insert(newString, at: index)
+            linesUpdated = true
+        }
+        index += 1
+    }
+    if linesUpdated {
+        try? updatedLines.joined(separator: "\(lineSeparator)").write(toFile: filePath, atomically: true, encoding: .utf8)
+    }
+}
