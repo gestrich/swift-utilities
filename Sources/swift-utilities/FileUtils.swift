@@ -60,3 +60,13 @@ public func replaceLinesAtFilePath(_ filePath: String, containing:String, newStr
         try? updatedLines.joined(separator: "\(lineSeparator)").write(toFile: filePath, atomically: true, encoding: .utf8)
     }
 }
+
+public func replaceOccurencesInFile(_ filePath: String, oldString:String, newString: String) {
+    
+    guard var fileContents = try? String(contentsOfFile: filePath, encoding: .utf8) else{
+        return
+    }
+    
+    let updatedFileContents = fileContents.replacingOccurrences(of: oldString, with: newString)
+    try? updatedFileContents.write(toFile: filePath, atomically: true, encoding: .utf8)
+}
