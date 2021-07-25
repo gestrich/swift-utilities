@@ -7,6 +7,18 @@
 
 import Foundation
 
+public typealias EmptyCodable = Dictionary<String,String>
+
+public protocol RestResource {
+    
+    var path: String { get }
+    
+    associatedtype PostDefinition: APIDefinition
+    associatedtype GetDefinition: APIDefinition
+    associatedtype PutDefinition: APIDefinition
+    associatedtype DeleteDefinition: APIDefinition
+}
+
 public enum MethodType {
     case Get
     case Post
