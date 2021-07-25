@@ -11,7 +11,7 @@ public typealias EmptyCodable = Dictionary<String,String>
 
 public protocol RestResource {
     
-    var path: String { get }
+    static var path: String { get }
     
     associatedtype PostDefinition: APIDefinition
     associatedtype GetDefinition: APIDefinition
