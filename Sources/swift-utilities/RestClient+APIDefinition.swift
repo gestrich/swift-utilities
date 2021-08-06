@@ -10,7 +10,15 @@ import Foundation
 public typealias EmptyCodable = Dictionary<String,String>
 
 public protocol RestAPI {
-    var path: String { get }
+    var pathComponent: String { get }
+    var parentPath: String { get }
+    func path() -> String
+}
+
+public extension RestAPI {
+    func path() -> String {
+        return [parentPath, pathComponent].compactMap({$0.count > 0 ? $0 : nil}).joined(separator: "/")
+    }
 }
 
 public enum MethodType {
@@ -19,9 +27,8 @@ public enum MethodType {
     case None
 }
 
-public protocol APIDefinition {
+public protocol APIDefinition: RestAPI {
     var method: MethodType { get }
-    var path: String { get }
     associatedtype In: Codable
     associatedtype Out: Codable
     
@@ -36,9 +43,10 @@ extension APIDefinition {
 
 
 public struct AnyAPIDefinition<In: Codable, Out: Codable>: APIDefinition {
-
+    public var pathComponent: String
+    public var parentPath: String
     public let method: MethodType
-    public let path: String
+    
     private let convertJSONData: (Data) throws -> Out
     
     //typealias In = In
@@ -46,8 +54,9 @@ public struct AnyAPIDefinition<In: Codable, Out: Codable>: APIDefinition {
     
     public init<Definition: APIDefinition>(wrappedDefinition: Definition) where Definition.Out == Out, Definition.In == In {
         self.convertJSONData = wrappedDefinition.convertJSONData
+        self.pathComponent = wrappedDefinition.pathComponent
+        self.parentPath = wrappedDefinition.parentPath
         self.method = wrappedDefinition.method
-        self.path = wrappedDefinition.path
     }
     
     public func convertJSONData(_ data: Data) throws -> Out {
@@ -61,7 +70,7 @@ extension RestClient {
         
         switch apiDef.method {
         case .Get:
-            self.getData(relativeURL: apiDef.path) { data in
+            self.getData(relativeURL: apiDef.path()) { data in
                 do {
                     completionBlock(try apiDef.convertJSONData(data))
                 } catch {
@@ -71,7 +80,7 @@ extension RestClient {
                 errorBlock(error)
             }
         case .Post:
-            self.peformJSONPost(relativeURL: apiDef.path, payload: input) { data in
+            self.peformJSONPost(relativeURL: apiDef.path(), payload: input) { data in
                 do {
                     completionBlock(try apiDef.convertJSONData(data))
                 } catch {
