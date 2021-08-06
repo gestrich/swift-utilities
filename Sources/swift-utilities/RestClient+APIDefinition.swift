@@ -9,19 +9,14 @@ import Foundation
 
 public typealias EmptyCodable = Dictionary<String,String>
 
-public protocol RestResource {
-    
-    static var path: String { get }
-    
-    associatedtype PostDefinition: APIDefinition
-    associatedtype GetDefinition: APIDefinition
-    associatedtype PutDefinition: APIDefinition
-    associatedtype DeleteDefinition: APIDefinition
+public protocol RestAPI {
+    var path: String { get }
 }
 
 public enum MethodType {
     case Get
     case Post
+    case None
 }
 
 public protocol APIDefinition {
@@ -85,6 +80,8 @@ extension RestClient {
             } errorBlock: { error in
                 errorBlock(error)
             }
+        case .None:
+            fatalError("Can't perform None operation")
         }
     }
 }
