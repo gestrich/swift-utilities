@@ -13,11 +13,17 @@ public protocol RestAPI {
     var pathComponent: String { get }
     var parentPath: String { get }
     func path() -> String
+    
+    func formPath(parentPath: String, thisPathComponent: String) -> String
 }
 
 public extension RestAPI {
+    
+    func formPath(parentPath: String, thisPathComponent: String) -> String {
+        return [parentPath, thisPathComponent].compactMap({$0.count > 0 ? $0 : nil}).joined(separator: "/")
+    }
     func path() -> String {
-        return [parentPath, pathComponent].compactMap({$0.count > 0 ? $0 : nil}).joined(separator: "/")
+        return self.formPath(parentPath: self.parentPath, thisPathComponent: self.pathComponent)
     }
 }
 
