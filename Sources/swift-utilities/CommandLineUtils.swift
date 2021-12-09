@@ -165,22 +165,22 @@ public func promptForYesNo(question: String) -> Bool {
 
 //MARK: Logging
 
-public func printStatus(_ message: String){
+public func printStep(_ message: String){
     print("")
-    print(message)
-    print("")
+    let circleSymbol: String = "\u{25EF}"
+    print(circleSymbol + " " + message)
 }
 
 public func printSuccess(_ message: String) {
     print("")
-    let checkmark: String = "\u{2705}"
-    print(checkmark + " " + message)
+    let checkmarkSymbol: String = "\u{2705}"
+    print(checkmarkSymbol + " " + message)
     print("")
 }
 
 public func printError(_ message: String) {
     print("")
-    let checkmark: String = "\u{274C}"
-    print(checkmark + " " + message)
+    let errorSymbol: String = "\u{274C}"
+    print(errorSymbol + " " + message)
     print("")
 }
