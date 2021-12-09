@@ -53,4 +53,16 @@ final class swift_utilitiesTests: XCTestCase {
 //        let res = promptForYesNo(question: "What do you want to do?")
 //        print(res)
     }
+    
+    func testPromptForAction(){
+//        let actions = [
+//            CommandLinePromptAction(name: "First", action: {
+//                print("first selected")
+//            }),
+//            CommandLinePromptAction(name: "First", action: {
+//                print("Second selected")
+//            })
+//        ]
+//        try! promptForAction(actions: actions)
+    }
 }
