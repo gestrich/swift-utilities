@@ -9,6 +9,16 @@
 import Foundation
 
 public extension String {
+    
+    func getPartBefore(toSearch: String) -> String {
+        
+        var toRet = ""
+        if let range = self.range(of: toSearch) {
+            toRet = String(self[..<range.lowerBound])
+        }
+        
+        return toRet
+    }
 
     func getPartAfter(toSearch: String) -> String {
         

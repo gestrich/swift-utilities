@@ -9,6 +9,14 @@ final class swift_utilitiesTests: XCTestCase {
         }
     }
     
+    func testGetPartBefore() {
+        XCTAssertEqual("test-string".getPartBefore(toSearch: "-string"), "test")
+        XCTAssertEqual("test-string".getPartAfter(toSearch: "nonhit"), "")
+        XCTAssertEqual("test-test-string".getPartBefore(toSearch: "test"), "")
+        XCTAssertEqual("string-string-test-test".getPartBefore(toSearch: "test"), "string-string-")
+        XCTAssertEqual("".getPartBefore(toSearch: "test"), "")
+    }
+    
     func testGetPartAfter() {
         XCTAssertEqual("test-string".getPartAfter(toSearch: "test"), "-string")
         XCTAssertEqual("test-string".getPartAfter(toSearch: "nonhit"), "")
