@@ -77,11 +77,11 @@ public func getEnvironmentVariable(key: String) -> String? {
 //MARK: Text Input
 
 public func promptForAction(title: String = "Select Option", actions: [CommandLinePromptAction]) throws {
-    let selection = promptForSelection(title: title, options: actions.map({$0.name}))
+    let selection = promptForSelection(title: title, displayOneBasedIndex: true, options: actions.map({$0.name}))
     try actions[selection].action()
 }
 
-public func promptForSelection(title: String, displayOneBasedIndex: Bool = true, options: [String]) -> Int {
+public func promptForSelection(title: String, displayOneBasedIndex: Bool = false, options: [String]) -> Int {
     print("\n\(title)")
     
     var optionsString = ""
