@@ -63,7 +63,7 @@ public func replaceLinesAtFilePath(_ filePath: String, containing:String, newStr
 
 public func replaceOccurencesInFile(_ filePath: String, oldString:String, newString: String) {
     
-    guard var fileContents = try? String(contentsOfFile: filePath, encoding: .utf8) else{
+    guard let fileContents = try? String(contentsOfFile: filePath, encoding: .utf8) else{
         return
     }
     
