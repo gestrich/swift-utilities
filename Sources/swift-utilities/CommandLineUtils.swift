@@ -149,7 +149,7 @@ public func promptForText(title inputTitle: String, defaultText: String? = nil) 
     }
 }
 
-func promptForYesNo(question: String) -> Bool {
+public func promptForYesNo(question: String) -> Bool {
     while true {
         let input = promptForText(title: "\(question) y/n: ")
         if ["y", "yes"].contains(input.lowercased()) {
