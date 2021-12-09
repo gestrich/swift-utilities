@@ -78,7 +78,7 @@ public extension String {
 
 //https://stackoverflow.com/questions/27327067/append-text-or-data-to-text-file-in-swift
 
-extension String {
+public extension String {
     func appendLineToURL(fileURL: URL) throws {
         try (self + "\n").appendToURL(fileURL: fileURL)
     }
@@ -89,7 +89,7 @@ extension String {
     }
 }
 
-extension Data {
+public extension Data {
     func append(fileURL: URL) throws {
         if let fileHandle = FileHandle(forWritingAtPath: fileURL.path) {
             defer {
