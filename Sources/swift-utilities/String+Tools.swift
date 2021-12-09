@@ -19,6 +19,16 @@ public extension String {
         
         return toRet
     }
+    
+    func getPartBeforeAndIncluding(toSearch: String) -> String {
+        
+        var toRet = ""
+        if let range = self.range(of: toSearch) {
+            toRet = String(self[..<range.upperBound])
+        }
+        
+        return toRet
+    }
 
     func getPartAfter(toSearch: String) -> String {
         
@@ -26,6 +36,16 @@ public extension String {
         if let range = self.range(of: toSearch) {
             toRet = String(self[range.upperBound...])
         }    
+        
+        return toRet
+    }
+    
+    func getPartAfterAndIncluding(toSearch: String) -> String {
+        
+        var toRet = ""
+        if let range = self.range(of: toSearch) {
+            toRet = String(self[range.lowerBound...])
+        }
         
         return toRet
     }
