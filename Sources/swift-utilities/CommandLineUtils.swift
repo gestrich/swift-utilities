@@ -74,28 +74,105 @@ public func getEnvironmentVariable(key: String) -> String? {
 }
 
 
+//MARK: Text Input
 
-public func promptForSelection(title: String, options: [String]) -> Int {
+public func promptForSelection(title: String, displayOneBasedIndex: Bool = true, options: [String]) -> Int {
     print("\n\(title)")
     
-    var promptString = ""
+    var optionsString = ""
     var x = 0
     for option in options {
-        option.withCString { //Using option string for C-String causes errors on Linux 
-            promptString = promptString.appendingFormat("\n%u:  %s", x, $0)    
+        option.withCString { //Using option string for C-String causes errors on Linux
+            let indexDisplay = displayOneBasedIndex ? x + 1 : x
+            optionsString = optionsString.appendingFormat("\n%u:  %s", indexDisplay, $0)
         }
         x += 1
     }
     
-    promptString = promptString.appendingFormat("\n\nEnter selection: ")
-    print(promptString, separator:" ", terminator:"") 
-    let response = readLine()
-    return Int(response!)!
+    print(optionsString)
+    
+    var toRet = -1
+    repeat {
+        let promptString = "\nEnter selection: "
+        print(promptString, separator:" ", terminator:"")
+        let userInput = readLine()
+        guard let userInput = userInput, let intInput = Int(userInput) else {
+            printError("Invalid Input: Expected a number")
+            continue
+        }
+        
+        let adjustedIndex = displayOneBasedIndex ? intInput - 1 : intInput
+        
+        guard adjustedIndex >= 0, adjustedIndex < options.count else {
+            printError("Input out of range")
+            continue
+        }
+            
+        toRet = adjustedIndex
+    } while toRet == -1
+
+    return toRet
 }
 
-public func promptForText(title: String) -> String {
-    print(title, separator:" ", terminator:"") 
-    let response = readLine()
-    return response!
+public func promptForText(title inputTitle: String, defaultText: String? = nil) -> String {
+    var outputTitle = inputTitle
+    outputTitle = outputTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+    
+    //Remove ending delimeter (: or ?) so we can add our default input if needed.
+    var trailingDelimeter = ":" //Default
+    if outputTitle.hasSuffix(":") {
+        let _ = outputTitle.popLast()
+    } else if outputTitle.hasSuffix("?") {
+        let _ = outputTitle.popLast()
+        trailingDelimeter = "?"
+    }
+    if let defaultText = defaultText {
+        outputTitle = defaultText.count > 0 ? outputTitle + " [\(defaultText)]": outputTitle
+    }
+    outputTitle += "\(trailingDelimeter) "
+    
+    while true == true {
+        
+        print(outputTitle, separator:" ", terminator:"")
+        if let response = readLine(), response.isEmpty == false {
+            return response
+        } else if let defaultText = defaultText {
+            return defaultText
+        } else {
+            printError("No input")
+        }
+    }
 }
 
+func promptForYesNo(question: String) -> Bool {
+    while true {
+        let input = promptForText(title: "\(question) y/n: ")
+        if ["y", "yes"].contains(input.lowercased()) {
+            return true
+        } else if ["n", "no"].contains(input.lowercased()) {
+            return false
+        } else {
+            printError("Invalid input \(input)")
+        }
+    }
+}
+
+
+//MARK: Logging
+
+func printStatus(_ message: String){
+    print("")
+    print(message)
+}
+
+func printSuccess(_ message: String) {
+    print("")
+    let checkmark: String = "\u{2705}"
+    print(checkmark + " " + message)
+}
+
+func printError(_ message: String) {
+    print("")
+    let checkmark: String = "\u{274C}"
+    print(checkmark + " " + message)
+}

@@ -2,12 +2,9 @@ import XCTest
 @testable import swift_utilities
 
 final class swift_utilitiesTests: XCTestCase {
-    func testFileUtils() {
-        let matches = filenamesMatching(pattern:"Screen.*", directory:"/Users/bill/Desktop")
-        for match in matches {
-            print(match)
-        }
-    }
+    
+    
+    //MARK: String parsing tests
     
     func testGetPartBefore() {
         XCTAssertEqual("test-string".getPartBefore(toSearch: "-string"), "test")
@@ -38,8 +35,22 @@ final class swift_utilitiesTests: XCTestCase {
         XCTAssertEqual("test-test-string".getPartAfterAndIncluding(toSearch: "test"), "test-test-string")
         XCTAssertEqual("".getPartAfterAndIncluding(toSearch: "test"), "")
     }
-
-    static var allTests = [
-        ("testFileUtils", testFileUtils),
-    ]
+    
+    
+    //MARK: Prompt Tests: These require interaction so disabled
+    
+    func testPromptForSelection() {
+//        let res = promptForSelection(title: "Test", displayOneBasedIndex: false, options: ["First", "Second"])
+//        print(res)
+    }
+    
+    func testPromptForText(){
+//        let res = promptForText(title: "Provide Input ", defaultText: nil)
+//        print(res)
+    }
+    
+    func testPromptForYesNo(){
+//        let res = promptForYesNo(question: "What do you want to do?")
+//        print(res)
+    }
 }
