@@ -165,18 +165,18 @@ func promptForYesNo(question: String) -> Bool {
 
 //MARK: Logging
 
-func printStatus(_ message: String){
+public func printStatus(_ message: String){
     print("")
     print(message)
 }
 
-func printSuccess(_ message: String) {
+public func printSuccess(_ message: String) {
     print("")
     let checkmark: String = "\u{2705}"
     print(checkmark + " " + message)
 }
 
-func printError(_ message: String) {
+public func printError(_ message: String) {
     print("")
     let checkmark: String = "\u{274C}"
     print(checkmark + " " + message)
