@@ -8,6 +8,13 @@ final class swift_utilitiesTests: XCTestCase {
             print(match)
         }
     }
+    
+    func testGetPartAfter() {
+        XCTAssertEqual("test-string".getPartAfter(toSearch: "test"), "-string")
+        XCTAssertEqual("test-string".getPartAfter(toSearch: "nonhit"), "")
+        XCTAssertEqual("test-test-string".getPartAfter(toSearch: "test"), "-test-string")
+        XCTAssertEqual("".getPartAfter(toSearch: "test"), "")
+    }
 
     static var allTests = [
         ("testFileUtils", testFileUtils),

@@ -14,7 +14,7 @@ public extension String {
         
         var toRet = ""
         if let range = self.range(of: toSearch) {
-            toRet = self.substring(from: range.upperBound)
+            toRet = String(self[range.upperBound...])
         }    
         
         return toRet
