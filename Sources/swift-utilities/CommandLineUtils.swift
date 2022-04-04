@@ -35,6 +35,53 @@ public func shell(arguments: [String] = []) -> (stringResult: String? , code:Int
     return (output, task.terminationStatus)
 }
 
+public func shellCheck() -> String? {
+    // Fetching users current shell
+    let env = ProcessInfo.processInfo.environment
+    let shellPath = env["SHELL"]!
+    
+    // Fetching users full path
+    let pathProcess = Process()
+    pathProcess.launchPath = "/usr/bin/env"
+    pathProcess.arguments = ["\(shellPath)","-c","eval $(/usr/libexec/path_helper -s) ; echo $PATH"]
+    let pipeShell = Pipe()
+    pathProcess.standardOutput = pipeShell
+    pathProcess.standardError = pipeShell
+    pathProcess.launch()
+    pathProcess.waitUntilExit()
+    let pathData = pipeShell.fileHandleForReading.readDataToEndOfFile()
+    guard let pathOutput: String = NSString(data: pathData, encoding: String.Encoding.utf8.rawValue) as String? else {
+        print("Unable to build shell path")
+        return nil
+    }
+    let cleanPathOutput = pathOutput.replacingOccurrences(of: "\n", with: "", options: .literal, range: nil)
+    return cleanPathOutput
+}
+
+public func safeShell(arguments: [String] = []) -> (stringResult: String? , code:Int32) {
+    var env = ProcessInfo.processInfo.environment
+    var path = env["PATH"]! as String
+
+    if let pathString = shellCheck() {
+        path = pathString + ":" + path
+    } else {
+        print("Unable to fetch users path")
+        return ("Error fetching users path", 1)
+    }
+    let task = Process()
+    env["PATH"] = path
+    task.environment = env
+    task.launchPath = "/usr/bin/env"
+    task.arguments = arguments
+    let pipe = Pipe()
+    task.standardOutput = pipe
+    task.standardError = pipe
+    task.launch()
+    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    let output = String(data: data, encoding: .utf8)
+    task.waitUntilExit()
+    return (output, task.terminationStatus)
+}
 
 public func getProgram(commandLineArgs: [String]) -> String {
     
