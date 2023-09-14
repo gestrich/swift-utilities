@@ -56,10 +56,10 @@ final class swift_utilitiesTests: XCTestCase {
     
     func testPromptForAction(){
 //        let actions = [
-//            CommandLineAction(name: "First", action: {
+//            CommandLineAction(longName: "First", action: {
 //                print("first selected")
 //            }),
-//            CommandLineAction(name: "First", action: {
+//            CommandLineAction(longName: "First", action: {
 //                print("Second selected")
 //            })
 //        ]
