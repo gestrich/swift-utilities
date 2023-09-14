@@ -8,13 +8,13 @@
 import Foundation
 
 public struct CommandLineAction {
-    public let name: String
-    public let abbreviation: String?
+    public let longName: String
+    public let shortName: String?
     public let action: () throws -> Void
     
-    public init(name: String, abbreviation: String? = nil, action: @escaping () throws -> Void) {
-        self.name = name
-        self.abbreviation = abbreviation
+    public init(longName: String, shortName: String? = nil, action: @escaping () throws -> Void) {
+        self.longName = longName
+        self.shortName = shortName
         self.action = action
     }
     

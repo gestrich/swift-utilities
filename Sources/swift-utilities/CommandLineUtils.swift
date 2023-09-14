@@ -125,9 +125,9 @@ public func getEnvironmentVariable(key: String) -> String? {
 
 public func promptForAction(title: String = "Select Option", actions: [CommandLineAction]) throws {
     let selection = promptForSelection(title: title, displayOneBasedIndex: true, options: actions.map({
-        var option = $0.name
-        if let abbreviation = $0.abbreviation {
-            option = "\(option) (-\(abbreviation))"
+        var option = $0.longName
+        if let shortName = $0.shortName {
+            option = "\(option) (-\(shortName))"
         }
         return option
     }))
